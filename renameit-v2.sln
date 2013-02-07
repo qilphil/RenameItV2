@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "renameit-v2", "renameit-v2\renameit-v2.csproj", "{42D08D0F-9C4B-4869-A29A-800E091CEFED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "renameit-v2-wpf", "renameit-v2-wpf\renameit-v2-wpf.csproj", "{7443772D-F031-4266-BC6B-DE5B1D0828EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "renameit-v2-common", "renamit-v2-common\renameit-v2-common.csproj", "{27ADCC05-EC8D-41CB-BB0C-F68313166BE5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{42D08D0F-9C4B-4869-A29A-800E091CEFED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42D08D0F-9C4B-4869-A29A-800E091CEFED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42D08D0F-9C4B-4869-A29A-800E091CEFED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42D08D0F-9C4B-4869-A29A-800E091CEFED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7443772D-F031-4266-BC6B-DE5B1D0828EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7443772D-F031-4266-BC6B-DE5B1D0828EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7443772D-F031-4266-BC6B-DE5B1D0828EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7443772D-F031-4266-BC6B-DE5B1D0828EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27ADCC05-EC8D-41CB-BB0C-F68313166BE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27ADCC05-EC8D-41CB-BB0C-F68313166BE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27ADCC05-EC8D-41CB-BB0C-F68313166BE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27ADCC05-EC8D-41CB-BB0C-F68313166BE5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
