@@ -81,16 +81,16 @@
             </ListView.View>
         </ListView>
         <GridSplitter HorizontalAlignment="Stretch" Height="5" Grid.Row="2" VerticalAlignment="Top" ResizeDirection="Rows"/>
-        <Grid Grid.Row="1" DataContext="{Binding ElementName=lbRules, Path=SelectedItem}">
+        <Grid x:Name="gridRules" Grid.Row="1" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120*"></ColumnDefinition>
                 <ColumnDefinition Width="120*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <ListBox x:Name="lbRules" Margin="20,10,90,10" ItemsSource="{Binding}" Grid.Column="0" BorderThickness="0" Background="#FFF0F0F0" MouseDoubleClick="lbRules_MouseDoubleClick"/>
+            <ListBox x:Name="lbRules" IsSynchronizedWithCurrentItem="True" Margin="20,10,90,10" ItemsSource="{Binding}" Grid.Column="0" BorderThickness="0" Background="#FFF0F0F0" MouseDoubleClick="lbRules_MouseDoubleClick"/>
             <Button x:Name="but_addRule" Style="{StaticResource MouseOverButtonStyle}" Content="Add Rule" HorizontalAlignment="Right" Margin="0,10,10,0" Grid.Column="0" VerticalAlignment="Top" Width="75" BorderThickness="0" Background="{x:Null}" FontWeight="Bold"  Opacity="0.25"  FontSize="14"   Click="but_addRule_Click"/>
             <Button x:Name="but_clear" Style="{StaticResource MouseOverButtonStyle}" Content="Clear All" HorizontalAlignment="Right" Margin="0,37,10,0" Grid.Column="0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.093,-0.15"  Background="{x:Null}"   Opacity="0.25"  FontWeight="Bold" FontSize="14" Click="but_clear_Click"/>
-            <TextBox x:Name="tbFromStr" Grid.Column="1" HorizontalAlignment="Left" Height="23" Text="{Binding Path=fromStr}" Margin="82,7,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-            <TextBox x:Name="tbToStr" Grid.Column="1" HorizontalAlignment="Left" Height="23" Text="{Binding Path=toStr}" Margin="82,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" />
+            <TextBox x:Name="tbFromStr" Grid.Column="1" HorizontalAlignment="Left" Height="23" Text="{Binding Path=fromStr, UpdateSourceTrigger=PropertyChanged}" Margin="82,7,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="tbToStr_TextChanged"/>
+            <TextBox x:Name="tbToStr" Grid.Column="1" HorizontalAlignment="Left" Height="23" Text="{Binding Path=toStr, UpdateSourceTrigger=PropertyChanged}" Margin="82,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="tbToStr_TextChanged" />
             <Label Content="From" Grid.Column="1" HorizontalAlignment="Left" Margin="7,5,0,0" VerticalAlignment="Top" Width="72" Height="23"/>
             <Label Content="To" Grid.Column="1" HorizontalAlignment="Left" Margin="5,37,0,0" VerticalAlignment="Top" Width="72" Height="23" RenderTransformOrigin="0.306,0.348"/>
             <GridSplitter VerticalAlignment="Stretch" Width="5" Grid.Column="1" HorizontalAlignment="Left" ResizeDirection="Columns"/>

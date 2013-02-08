@@ -1,18 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using renameit_v2_wpf.classes;
 
 namespace renameit_v2_wpf
@@ -34,8 +22,9 @@ namespace renameit_v2_wpf
             fList = new fileList();
             lastOpenDir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
             lbRules.ItemsSource = currentRules;
+            
             lvFiles.ItemsSource = fList;
-
+            gridRules.DataContext = currentRules;
         }
 
         private void addFileList(string[] pAddFiles)
@@ -71,7 +60,8 @@ namespace renameit_v2_wpf
             }
             
             d.Dispose();
-            
+            lvFiles.Items.Refresh();
+            lbRules.Items.Refresh();
         }
 
         private void lvFiles_Drop(object sender, DragEventArgs e)
@@ -100,6 +90,14 @@ namespace renameit_v2_wpf
             currentRules.Clear();
             updateFileList();
         }
+
+        private void tbToStr_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            updateFileList();
+        }
+
+
+    
 
 
     }
