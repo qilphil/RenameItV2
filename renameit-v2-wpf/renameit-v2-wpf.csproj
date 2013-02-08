@@ -59,6 +59,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="ruleForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="RV2MainWPF.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -66,6 +70,15 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="classes\deepClone.cs" />
+    <Compile Include="classes\listfile.cs" />
+    <Compile Include="classes\RegexRule.cs" />
+    <Compile Include="classes\ReplaceRule.cs" />
+    <Compile Include="classes\Rule.cs" />
+    <Compile Include="classes\ruleList.cs" />
+    <Compile Include="ruleForm.xaml.cs">
+      <DependentUpon>ruleForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="RV2MainWPF.xaml.cs">
       <DependentUpon>RV2MainWPF.xaml</DependentUpon>
