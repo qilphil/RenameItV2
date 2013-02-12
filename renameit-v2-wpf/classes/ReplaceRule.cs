@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+using System.Xml.Serialization;
 namespace renameit_v2_wpf.classes
 {
     [Serializable]
-    class ReplaceRule : baseRule
+    [XmlInclude(typeof(baseRule))]
+    public class ReplaceRule : baseRule
     {
     
         public override string apply(string filename) {
@@ -22,10 +19,16 @@ namespace renameit_v2_wpf.classes
            
 
         }
-        public ReplaceRule():base()
+        public ReplaceRule(MainWindow pMainWindow)
+            : base()
+        {
+        }
+        public ReplaceRule()
+            : base()
         {
         }
         public override string ToString()
+
         {
             return string.Format("Simple Replace - From: {0} To: {1}", fromStr, toStr);
         }

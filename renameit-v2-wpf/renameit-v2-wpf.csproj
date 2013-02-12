@@ -64,11 +64,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="extRuleForms.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ruleForm.xaml">
+    <Page Include="RuleFormRegEx.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -86,11 +82,8 @@
     <Compile Include="classes\ReplaceRule.cs" />
     <Compile Include="classes\Rule.cs" />
     <Compile Include="classes\ruleList.cs" />
-    <Compile Include="extRuleForms.xaml.cs">
-      <DependentUpon>extRuleForms.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ruleForm.xaml.cs">
-      <DependentUpon>ruleForm.xaml</DependentUpon>
+    <Compile Include="RuleFormRegEx.xaml.cs">
+      <DependentUpon>RuleFormRegEx.xaml</DependentUpon>
     </Compile>
     <Compile Include="RV2MainWPF.xaml.cs">
       <DependentUpon>RV2MainWPF.xaml</DependentUpon>

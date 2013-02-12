@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls;
+using System.Xml.Serialization;
 namespace renameit_v2_wpf.classes
 {
 
     [Serializable]
     public class baseRule : INotifyPropertyChanged
     {
-        private String fromStrValue;
-        private String toStrValue;
+        protected String fromStrValue;
+        protected String toStrValue;
+        
         public event PropertyChangedEventHandler PropertyChanged;
+        
+        [XmlIgnore]
+        public RuleForm extraControl;
 
         public virtual String fromStr
         {
@@ -31,6 +33,7 @@ namespace renameit_v2_wpf.classes
                 }
             }
         }
+        
         public virtual String toStr
         {
             get
@@ -51,12 +54,11 @@ namespace renameit_v2_wpf.classes
         public virtual string apply(string filename) { return filename; }
         public override string ToString() { return "Virtual Rule"; }
 
-        public Dictionary<string, string> ruleProps;
         public virtual baseRule clone()
         {
             return this.DeepClone();
         }
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        protected void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
             if (PropertyChanged != null)
             {
@@ -71,21 +73,12 @@ namespace renameit_v2_wpf.classes
         }
         public baseRule()
         {
-            ruleProps = new Dictionary<string, string>();
-        }
-
-        public virtual void setupForm(ruleForm pRuleForm)
-        {
-            /*  pRuleForm.cbRuleType.Items.AddRange(nameList.Values.ToArray<string>());
-              pRuleForm.cbRuleType.SelectedIndex = pRuleForm.cbRuleType.Items.IndexOf(nameList[this.GetType()]);
-              pRuleForm.gbRule.Text = nameList[this.GetType()];
-              pRuleForm.tbFrom.Text = fromStr;
-              pRuleForm.tbTo.Text = toStr;
-             */
+          
         }
 
 
-        protected void addControl(Control pNewControl, String pControlName, ruleForm pRuleForm)
+
+        protected void addControl(Control pNewControl, String pControlName)
         {
             /*   if (!pRuleForm.ruleControls.ContainsKey(pControlName))
                {
@@ -109,7 +102,7 @@ namespace renameit_v2_wpf.classes
         }
 
 
-        public virtual void saveData(ruleForm ruleForm)
+        public virtual void saveData(/*ruleForm ruleForm*/)
         {
 
         }
