@@ -9,7 +9,10 @@ namespace renameit_v2_wpf.rules
 
         public override string apply(string filename)
         {
-            return filename.Replace(fromStr, toStr);
+            if (fromStr != String.Empty)
+                return filename.Replace(fromStr, toStr);
+            else
+                return fromStr;
         }
         public override baseRule clone()
         {

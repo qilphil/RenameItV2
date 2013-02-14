@@ -139,14 +139,12 @@ namespace renameit_v2_wpf
                 mainPanelBorder.Margin = new Thickness(0);
             }
         }
+
         public void updateFileList()
         {
             var d = Dispatcher.DisableProcessing();
 
-            foreach (listFile iFile in fList)
-            {
-                currentRules.apply(iFile);
-            }
+            fList.apply(currentRules);
 
             d.Dispose();
             lvFiles.Items.Refresh();
@@ -215,6 +213,14 @@ namespace renameit_v2_wpf
         private void Window_Closing_1(object sender, System.ComponentModel.CancelEventArgs e)
         {
             FileWrite(defFilePath);
+        }
+
+        private void but_delRule_Click(object sender, RoutedEventArgs e)
+        {
+            if (lbRules.SelectedItem != null) {
+                currentRules.RemoveAt(lbRules.SelectedIndex);
+                updateFileList();
+            }
         }
     }
 }

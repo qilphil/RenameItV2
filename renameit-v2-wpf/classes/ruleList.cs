@@ -19,7 +19,9 @@ namespace renameit_v2_wpf.rules
             {
                 rReplacedName = iRule.apply(System.IO.Path.GetFileName(rReplacedName));
             }
+                       
             pFile.convertedFileName = rReplacedName;
+            pFile.testDuplicate();
             return rReplacedName;
         }
     }
