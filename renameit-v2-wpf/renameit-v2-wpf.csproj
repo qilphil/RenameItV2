@@ -76,6 +76,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="classes\ErrorConverter.cs" />
     <Compile Include="classes\deepClone.cs" />
     <Compile Include="classes\listfile.cs" />
     <Compile Include="classes\RegexRule.cs" />

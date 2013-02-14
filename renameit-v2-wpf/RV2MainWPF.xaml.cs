@@ -5,7 +5,7 @@ using renameit_v2_wpf.classes;
 using System.IO;
 using System;
 using System.Xml.Serialization;
-
+using System.Windows.Threading;
 namespace renameit_v2_wpf
 {
     /// <summary>
@@ -18,62 +18,109 @@ namespace renameit_v2_wpf
         private string lastOpenDir { get; set; }
         private string defFileName = "default.xml";
         private string defFilePath;
+        DispatcherTimer dispatcherTimer;
+
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            FileWrite(defFilePath);
+        }
         private void FileLoad(string pLoadFile)
         {
             isLoading = true;
             if (File.Exists(pLoadFile))
             {
-                System.Xml.Serialization.XmlSerializer reader =  new System.Xml.Serialization.XmlSerializer(typeof(ruleList));
+                System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(ruleList));
                 System.IO.StreamReader file = new System.IO.StreamReader(pLoadFile);
-                currentRules = (ruleList) reader.Deserialize(file);
-                foreach(baseRule iRule in currentRules) {
-                    if (iRule.extraControl != null) {
+                ruleList newRules = (ruleList)reader.Deserialize(file);
+                foreach (baseRule iRule in newRules)
+                {
+                    if (iRule.extraControl != null)
+                    {
                         iRule.extraControl.myWindow = this;
                     }
-                }
+                };
+                currentRules = newRules;
+
             }
             isLoading = false;
+            sbiLoadSave.Content = "Loaded";
+
         }
         private void FileWrite(string pWriteFile)
         {
             if (!isLoading && Directory.Exists(Path.GetDirectoryName(pWriteFile)))
             {
-                isLoading = true;
-                System.Xml.Serialization.XmlSerializer writer =
+                FileStream writeStream = null;
+                System.IO.StreamWriter fileWriter = null;
+                try
+                {
+                    dispatcherTimer.Stop(); 
+                    writeStream = new FileStream(pWriteFile, FileMode.Create, FileAccess.Write, FileShare.None);
+                    System.Xml.Serialization.XmlSerializer writer =
                     new System.Xml.Serialization.XmlSerializer(typeof(ruleList));
+                    
+                    fileWriter = new System.IO.StreamWriter(writeStream);
+                    writer.Serialize(fileWriter, currentRules);
+                    sbiLoadSave.Content = "Saved " + DateTime.Now.ToString();
+                    
+                }
+                catch (Exception exc)
+                {
+                    sbiLoadSave.Content = "Save Error " + exc.Message;
+                    lblError.Content = exc.ToString();
+                }
+                finally
+                {
+                    //if (writeStream != null) writeStream.Close();
+                    if (fileWriter != null) fileWriter.Close();
+                }
+                
 
-                System.IO.StreamWriter file = new System.IO.StreamWriter( pWriteFile);
-                writer.Serialize(file, currentRules);
-                file.Close();
-                isLoading = false;
             }
         }
         private bool isLoading = false;
         public MainWindow()
         {
             InitializeComponent();
-            string UserPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"RenameItV2");
+            string UserPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RenameItV2");
             if (!Directory.Exists(UserPath))
             {
                 Directory.CreateDirectory(UserPath);
             }
             defFilePath = System.IO.Path.Combine(UserPath, defFileName);
-            FileLoad(defFilePath);
-            
+            dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimer.Stop();
             currentRules = new ruleList();
+            FileLoad(defFilePath);
+
             fList = new fileList();
+
             lastOpenDir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
             lbRules.ItemsSource = currentRules;
-
             lvFiles.ItemsSource = fList;
             gridRules.DataContext = currentRules;
         }
 
         private void addFileList(string[] pAddFiles)
         {
-            foreach (string filename in pAddFiles)
-                fList.Add(new listFile { fileName = filename });
+            int total = pAddFiles.Length;
+            int added = 0, ignored = 0;
+            foreach (string iFilename in pAddFiles)
+                if (!fList.ContainsFileName(iFilename))
+                {
+                    fList.Add(new listFile { fileName = iFilename });
+                    added++;
+                }
+                else {
+                    ignored++;
+                }
+
+            
             lastOpenDir = System.IO.Path.GetDirectoryName(pAddFiles[pAddFiles.Length - 1]);
+            sbiAddedMsg.Content = String.Format("{0} files added - {1} files ignored",added,ignored);
             updateFileList();
         }
 
@@ -104,7 +151,9 @@ namespace renameit_v2_wpf
             d.Dispose();
             lvFiles.Items.Refresh();
             lbRules.Items.Refresh();
-            FileWrite(defFilePath);
+            dispatcherTimer.Stop();
+            dispatcherTimer.Start();
+
         }
 
         private void lvFiles_Drop(object sender, DragEventArgs e)
@@ -122,11 +171,6 @@ namespace renameit_v2_wpf
             updateFileList();
         }
 
-
-        private void lbRules_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-
-        }
 
         private void but_clear_Click(object sender, RoutedEventArgs e)
         {
@@ -149,7 +193,7 @@ namespace renameit_v2_wpf
 
         private void lbRules_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (((baseRule)lbRules.SelectedItem).extraControl != null)
+            if (lbRules.SelectedItem!=null && ((baseRule)lbRules.SelectedItem).extraControl != null)
             {
                 gridExtraControl.Children.Clear();
                 gridExtraControl.Children.Add(((baseRule)lbRules.SelectedItem).extraControl);
@@ -166,6 +210,11 @@ namespace renameit_v2_wpf
         private void Window_Loaded_1(object sender, RoutedEventArgs e)
         {
             updateFileList();
+        }
+
+        private void Window_Closing_1(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            FileWrite(defFilePath);
         }
     }
 }

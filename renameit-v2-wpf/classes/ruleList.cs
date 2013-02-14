@@ -17,7 +17,7 @@ namespace renameit_v2_wpf.classes
             String rReplacedName = pFile.fileName;
             foreach (baseRule iRule in this)
             {
-                rReplacedName = iRule.apply(rReplacedName);
+                rReplacedName = iRule.apply(System.IO.Path.GetFileName(rReplacedName));
             }
             pFile.convertedFileName = rReplacedName;
             return rReplacedName;

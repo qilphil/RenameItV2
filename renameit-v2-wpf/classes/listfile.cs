@@ -21,5 +21,11 @@ namespace renameit_v2_wpf.classes
 
     }
     public class fileList : ObservableCollection<listFile> { 
+        public bool ContainsFileName(string pfileName) {
+            foreach (listFile testFile in this)
+                if (testFile.fileName == pfileName)
+                    return true;
+            return false;
+        }
     }
 }

@@ -49,18 +49,8 @@ namespace renameit_v2_wpf.classes
             {
                 if (this.fromStrValue != value)
                 {
-                    Label rexError = ((renameit_v2_wpf.RuleFormRegEx)extraControl).lblRegExError;
                     this.fromStrValue = value;
-                    rexError.Content = "";
-                    try
-                    {
-                        Regex testRegex = new Regex(this.fromStrValue);
-                        fromRegEx = testRegex;
-                    }
-                    catch (ArgumentException errorEx)
-                    {
-                        rexError.Content = errorEx.Message;
-                    }
+                    mkRegEx();
                     NotifyPropertyChanged();
                 }
             }
@@ -77,6 +67,7 @@ namespace renameit_v2_wpf.classes
                 if (this.caseSensitiveValue != value)
                 {
                     this.caseSensitiveValue = value;
+                    mkRegEx();
                     NotifyPropertyChanged();
                 }
             }
@@ -85,16 +76,20 @@ namespace renameit_v2_wpf.classes
 
         private void mkRegEx()
         {
-            regexError = "";
+            Label rexError = ((renameit_v2_wpf.RuleFormRegEx)extraControl).lblRegExError;
+            bool regExHasError = false;  
             try
             {
                 fromRegEx = new Regex(fromStrValue, RegexOptions.Compiled | ((bool)caseSensitive ? 0 : RegexOptions.IgnoreCase));
+                rexError.Content = "";
             }
             catch (Exception e)
             {
+                regExHasError = true;
                 fromRegEx = null;
-                regexError = e.Message;
+                rexError.Content = e.Message;
             }
+            hasError = regExHasError;
         }
         /* 
 
@@ -135,8 +130,7 @@ namespace renameit_v2_wpf.classes
         }
         public override string apply(string filename)
         {
-            if (fromRegEx == null)
-                mkRegEx();
+
             return (fromRegEx == null) ? filename : fromRegEx.Replace(filename, toStr);
         }
         public override void saveData(/*ruleForm ruleForm*/)

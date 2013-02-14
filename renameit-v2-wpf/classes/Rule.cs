@@ -17,7 +17,27 @@ namespace renameit_v2_wpf.classes
         
         [XmlIgnore]
         public RuleForm extraControl;
+        
+        [XmlIgnore]
+        public bool hasErrorValue;
 
+        public virtual bool hasError
+        {
+            get
+            {
+                return this.hasErrorValue;
+            }
+            set
+            {
+                if (this.hasErrorValue != value)
+                {
+                    this.hasErrorValue = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        
         public virtual String fromStr
         {
             get
