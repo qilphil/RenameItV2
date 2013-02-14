@@ -4,7 +4,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Controls;
-using renameit_v2_wpf.classes;
+using renameit_v2_wpf.rules;
 namespace renameit_v2_wpf
 {
 

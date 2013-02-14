@@ -6,7 +6,7 @@ using System.Text;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-namespace renameit_v2_wpf.classes
+namespace renameit_v2_wpf.rules
 {
     public static class ExtensionMethods
     {

@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace renameit_v2_wpf.classes
+namespace renameit_v2_wpf.rules
 {
     public class listFile
     {
         public string fileName { get; set; }
-        public  string showName
+        public string showName
         {
             get
             {
@@ -20,8 +20,10 @@ namespace renameit_v2_wpf.classes
         public string convertedFileName { get; set; }
 
     }
-    public class fileList : ObservableCollection<listFile> { 
-        public bool ContainsFileName(string pfileName) {
+    public class fileList : ObservableCollection<listFile>
+    {
+        public bool ContainsFileName(string pfileName)
+        {
             foreach (listFile testFile in this)
                 if (testFile.fileName == pfileName)
                     return true;

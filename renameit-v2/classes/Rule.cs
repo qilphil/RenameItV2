@@ -16,17 +16,21 @@ namespace renameit_v2.classes
 
         public virtual string apply(string filename) { return filename; }
         public override string ToString() { return "Virtual Rule"; }
-       
-        public Dictionary<string, string> ruleProps ;
-        public virtual baseRule clone() {
+
+        public Dictionary<string, string> ruleProps;
+        public virtual baseRule clone()
+        {
             return this.DeepClone();
         }
 
-        public baseRule(baseRule pBaseRule) :base () {
-            
+        public baseRule(baseRule pBaseRule)
+            : base()
+        {
+
         }
-        public baseRule()   {
-            ruleProps = new Dictionary<string, string>();
+        public baseRule()
+        {
+            this.ruleProps = new Dictionary<string, string>();
         }
 
         public virtual void setupForm(ruleForm pRuleForm)
@@ -34,13 +38,13 @@ namespace renameit_v2.classes
             pRuleForm.cbRuleType.Items.AddRange(nameList.Values.ToArray<string>());
             pRuleForm.cbRuleType.SelectedIndex = pRuleForm.cbRuleType.Items.IndexOf(nameList[this.GetType()]);
             pRuleForm.gbRule.Text = nameList[this.GetType()];
-            pRuleForm.tbFrom.Text = fromStr;
-            pRuleForm.tbTo.Text = toStr;
-           
+            pRuleForm.tbFrom.Text = this.fromStr;
+            pRuleForm.tbTo.Text = this.toStr;
         }
 
 
-        protected void addControl(Control pNewControl,String pControlName,ruleForm pRuleForm) {
+        protected void addControl(Control pNewControl, String pControlName, ruleForm pRuleForm)
+        {
             if (!pRuleForm.ruleControls.ContainsKey(pControlName))
             {
                 pRuleForm.addNamedControl(pControlName, pNewControl);
@@ -53,18 +57,19 @@ namespace renameit_v2.classes
             }
         }
         public static Dictionary<System.Type, string> nameList = new Dictionary<System.Type, string>() {
-            {typeof(ReplaceRule),"Einfaches Ersetzen" },
-            {typeof(RegExRule),"Regular Expression" },
+            {typeof(ReplaceRule), "Einfaches Ersetzen" },
+            {typeof(RegExRule), "Regular Expression" },
             
         };
-        public virtual bool isValid() {
+        public virtual bool isValid()
+        {
             return true;
         }
 
 
         public virtual void saveData(ruleForm ruleForm)
         {
-                            
+
         }
     }
 

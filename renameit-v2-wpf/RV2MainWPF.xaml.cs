@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using renameit_v2_wpf.classes;
+using renameit_v2_wpf.rules;
 using System.IO;
 using System;
 using System.Xml.Serialization;
@@ -120,7 +120,7 @@ namespace renameit_v2_wpf
 
             
             lastOpenDir = System.IO.Path.GetDirectoryName(pAddFiles[pAddFiles.Length - 1]);
-            sbiAddedMsg.Content = String.Format("{0} files added - {1} files ignored",added,ignored);
+            sbiAddedMsg.Content = string.Format("{0} files added - {1} files ignored",added,ignored);
             updateFileList();
         }
 

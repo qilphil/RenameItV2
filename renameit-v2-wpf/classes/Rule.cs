@@ -4,20 +4,20 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Xml.Serialization;
-namespace renameit_v2_wpf.classes
+namespace renameit_v2_wpf.rules
 {
 
     [Serializable]
     public class baseRule : INotifyPropertyChanged
     {
-        protected String fromStrValue;
-        protected String toStrValue;
-        
+        protected string fromStrValue;
+        protected string toStrValue;
+
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
         [XmlIgnore]
         public RuleForm extraControl;
-        
+
         [XmlIgnore]
         public bool hasErrorValue;
 
@@ -37,8 +37,8 @@ namespace renameit_v2_wpf.classes
             }
         }
 
-        
-        public virtual String fromStr
+
+        public virtual string fromStr
         {
             get
             {
@@ -53,8 +53,8 @@ namespace renameit_v2_wpf.classes
                 }
             }
         }
-        
-        public virtual String toStr
+
+        public virtual string toStr
         {
             get
             {
@@ -65,11 +65,11 @@ namespace renameit_v2_wpf.classes
                 if (this.toStrValue != value)
                 {
                     this.toStrValue = value;
-                    NotifyPropertyChanged();
+                    this.NotifyPropertyChanged();
                 }
             }
         }
-        
+
 
         public virtual string apply(string filename) { return filename; }
         public override string ToString() { return "Virtual Rule"; }
@@ -78,11 +78,12 @@ namespace renameit_v2_wpf.classes
         {
             return this.DeepClone();
         }
-        protected void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+
+        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 
@@ -91,14 +92,15 @@ namespace renameit_v2_wpf.classes
         {
 
         }
+
         public baseRule()
         {
-          
+
         }
 
 
 
-        protected void addControl(Control pNewControl, String pControlName)
+        protected void addControl(Control pNewControl, string pControlName)
         {
             /*   if (!pRuleForm.ruleControls.ContainsKey(pControlName))
                {
@@ -112,9 +114,8 @@ namespace renameit_v2_wpf.classes
                }*/
         }
         public static Dictionary<System.Type, string> nameList = new Dictionary<System.Type, string>() {
-            {typeof(ReplaceRule),"Einfaches Ersetzen" },
-            {typeof(RegExRule),"Regular Expression" },
-            
+            { typeof(ReplaceRule), "Einfaches Ersetzen" },
+            { typeof(RegExRule), "Regular Expression" },
         };
         public virtual bool isValid()
         {

@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Xml.Serialization;
-namespace renameit_v2_wpf.classes
+namespace renameit_v2_wpf.rules
 {
     [Serializable]
     [XmlInclude(typeof(baseRule))]
     public class ReplaceRule : baseRule
     {
-    
-        public override string apply(string filename) {
-            return filename.Replace(fromStr,toStr);
+
+        public override string apply(string filename)
+        {
+            return filename.Replace(fromStr, toStr);
         }
         public override baseRule clone()
         {
             return this.DeepClone();
         }
-        public  ReplaceRule(ReplaceRule pReplaceRule) : base(pReplaceRule)
+        public ReplaceRule(ReplaceRule pReplaceRule)
+            : base(pReplaceRule)
         {
-           
+
 
         }
         public ReplaceRule(MainWindow pMainWindow)
@@ -28,7 +30,6 @@ namespace renameit_v2_wpf.classes
         {
         }
         public override string ToString()
-
         {
             return string.Format("Simple Replace - From: {0} To: {1}", fromStr, toStr);
         }

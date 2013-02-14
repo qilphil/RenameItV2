@@ -38,7 +38,7 @@ namespace renameit_v2
                 if (!iRule.isValid())
                 {
                     ListViewItem newRuleItem = lvRules.Items[lvRules.Items.Count - 1];
-                    newRuleItem.ForeColor =  Color.FromName("Red");
+                    newRuleItem.ForeColor = Color.FromName("Red");
                 }
             }
         }
@@ -78,19 +78,20 @@ namespace renameit_v2
         {
             int editIndex = lvRules.SelectedIndices[0];
             if (currentRules.Count > editIndex)
-                editRule(editIndex);
+                this.editRule(editIndex);
         }
 
-        private void editRule(int pRuleIndex) {
+        private void editRule(int pRuleIndex)
+        {
             using (ruleForm editRuleForm = new ruleForm())
             {
                 editRuleForm.setRule(currentRules[pRuleIndex]);
-             
+
                 DialogResult dResult = editRuleForm.ShowDialog(this);
-                
+
                 if (dResult == DialogResult.OK)
                 {
-                    currentRules[pRuleIndex]=editRuleForm.editRule.clone();
+                    currentRules[pRuleIndex] = editRuleForm.editRule.clone();
                 }
                 updateRuleList();
                 updateFileList();
@@ -100,13 +101,14 @@ namespace renameit_v2
         private void toolStripButton3_Click(object sender, System.EventArgs e)
         {
             currentRules.Add(new ReplaceRule { fromStr = "from", toStr = "to" });
-            editRule(currentRules.Count-1);
+            editRule(currentRules.Count - 1);
         }
 
         private void toolStripButton1_Click(object sender, System.EventArgs e)
         {
             int delIndex = lvRules.SelectedIndices[0];
-            if (delIndex >=0 && delIndex <lvRules.Items.Count ) {
+            if (delIndex >= 0 && delIndex < lvRules.Items.Count)
+            {
                 currentRules.RemoveAt(delIndex);
                 updateRuleList();
                 updateFileList();
@@ -130,12 +132,12 @@ namespace renameit_v2
             lastOpenDir = Path.GetDirectoryName(pAddFiles[pAddFiles.Length - 1]);
             updateRuleList();
             updateFileList();
-        
+
         }
 
         private void toolStripButton6_Click(object sender, System.EventArgs e)
         {
-            openFileDialog1.InitialDirectory=lastOpenDir;
+            openFileDialog1.InitialDirectory = lastOpenDir;
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 addFileList((string[])openFileDialog1.FileNames);

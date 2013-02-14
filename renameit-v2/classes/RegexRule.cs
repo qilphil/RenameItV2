@@ -90,7 +90,7 @@ namespace renameit_v2.classes
             addControl( new CheckBox()
                 {
                     Location = new System.Drawing.Point(20, 150)
-                },"cbCaseSensitive", pRuleForm);
+                }, "cbCaseSensitive", pRuleForm);
             
 
             // set current Values

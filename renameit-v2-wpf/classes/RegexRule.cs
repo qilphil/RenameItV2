@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
-namespace renameit_v2_wpf.classes
+namespace renameit_v2_wpf.rules
 {
     [Serializable]
     [XmlInclude(typeof(baseRule))]
@@ -39,7 +39,7 @@ namespace renameit_v2_wpf.classes
         {
             extraControl = new renameit_v2_wpf.RuleFormRegEx();
         }
-        public override String fromStr
+        public override string fromStr
         {
             get
             {
@@ -81,7 +81,7 @@ namespace renameit_v2_wpf.classes
             try
             {
                 fromRegEx = new Regex(fromStrValue, RegexOptions.Compiled | ((bool)caseSensitive ? 0 : RegexOptions.IgnoreCase));
-                rexError.Content = "";
+                rexError.Content = string.Empty;
             }
             catch (Exception e)
             {
@@ -135,8 +135,8 @@ namespace renameit_v2_wpf.classes
         }
         public override void saveData(/*ruleForm ruleForm*/)
         {
-            //  base.saveData(ruleForm);
-            //     caseSensitive = ((CheckBox)ruleForm.ruleControls["cbCaseSensitive"]).IsChecked ;
+            ////  base.saveData(ruleForm);
+            ////     caseSensitive = ((CheckBox)ruleForm.ruleControls["cbCaseSensitive"]).IsChecked ;
         }
         public override string ToString()
         {

@@ -9,20 +9,23 @@ namespace renameit_v2.classes
     [Serializable]
     class ReplaceRule : baseRule
     {
-    
-        public override string apply(string filename) {
-            return filename.Replace(fromStr,toStr);
+
+        public override string apply(string filename)
+        {
+            return filename.Replace(fromStr, toStr);
         }
         public override baseRule clone()
         {
             return this.DeepClone();
         }
-        public  ReplaceRule(ReplaceRule pReplaceRule) : base(pReplaceRule)
+        public ReplaceRule(ReplaceRule pReplaceRule)
+            : base(pReplaceRule)
         {
-           
+
 
         }
-        public ReplaceRule():base()
+        public ReplaceRule()
+            : base()
         {
         }
         public override string ToString()
