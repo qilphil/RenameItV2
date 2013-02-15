@@ -17,8 +17,6 @@ namespace renameit_v2_wpf.rules
     {
         private Regex fromRegEx;
 
-        private string regexError;
-
         public override baseRule clone()
         {
             return this.DeepClone();
@@ -93,39 +91,7 @@ namespace renameit_v2_wpf.rules
             }
             hasError = regExHasError;
         }
-        /* 
-
-    public override void setupForm()
-    {
-         base.setupForm(pRuleForm);
-         addControl(new Label()
-         {
-             Location = new System.Drawing.Point(40, 140),
-             Text = "Case Sensitive",
-             AutoSize = true
-         }, "lbCaseSensitive", pRuleForm);
-
-         addControl( new Label()
-                 {
-                     Location = new System.Drawing.Point(20, 170),
-                     Text = "",
-                     AutoSize = true
-                 }, "lbRegexError", pRuleForm);
-
-
-         addControl( new CheckBox()
-             {
-                 Location = new System.Drawing.Point(20, 150)
-             },"cbCaseSensitive", pRuleForm);
-            
-
-         // set current Values
-
-         ((CheckBox)pRuleForm.ruleControls["cbCaseSensitive"]).CheckState = caseSensitive ? CheckState.Checked : CheckState.Unchecked;
-         mkRegEx();
-         ((Label)pRuleForm.ruleControls["lbRegexError"]).Text = regexError;
-    }
-*/
+   
         public override bool isValid()
         {
             return !(fromRegEx == null);
@@ -137,8 +103,6 @@ namespace renameit_v2_wpf.rules
         }
         public override void saveData(/*ruleForm ruleForm*/)
         {
-            ////  base.saveData(ruleForm);
-            ////     caseSensitive = ((CheckBox)ruleForm.ruleControls["cbCaseSensitive"]).IsChecked ;
         }
         public override string ToString()
         {
