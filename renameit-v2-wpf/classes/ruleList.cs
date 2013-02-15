@@ -24,5 +24,25 @@ namespace renameit_v2_wpf.rules
             pFile.testDuplicate();
             return rReplacedName;
         }
+
+        internal void MoveUp(baseRule pMoveUpRule)
+        {
+            int indexpos = IndexOf(pMoveUpRule);
+            if (indexpos > 0)
+            {
+                Remove(pMoveUpRule);
+                Insert(indexpos - 1, pMoveUpRule);
+            }
+        }
+
+        internal void MoveDown(baseRule pMoveDownRule)
+        {
+            int indexpos = IndexOf(pMoveDownRule);
+            if (indexpos < Count-1)
+            {
+                Remove(pMoveDownRule);
+                Insert(indexpos + 1, pMoveDownRule);
+            }
+        }
     }
 }

@@ -33,6 +33,31 @@ namespace renameit_v2_wpf.rules
             errorMessage = hasError == errorCode.alreadyExists ? String.Format("File {0} exists", convertedFileName) : String.Empty;
             return hasError == errorCode.alreadyExists;
         }
+
+        internal string doRename()
+        {
+            if (hasError == errorCode.none)
+            {
+                try
+                {
+                    string targetFileName = Path.Combine(Path.GetDirectoryName(fileName), convertedFileName);
+
+                    if (File.Exists(fileName) && !File.Exists(targetFileName))
+                        File.Move(fileName, targetFileName);
+                }
+                catch (Exception renExc)
+                {
+                    return renExc.ToString();
+                }
+                return String.Empty;
+            }
+            else {
+                return hasError.ToString();
+
+            }
+
+
+        }
     }
     public class fileList : ObservableCollection<listFile>
     {
@@ -75,6 +100,32 @@ namespace renameit_v2_wpf.rules
             }
             
 
+        }
+
+        internal void delete(string pDelFileName)
+        {
+            List<listFile> delFiles =new List<listFile>();
+            foreach(listFile iTestFile in this) 
+            {
+                if (iTestFile.fileName == pDelFileName) {
+                    delFiles.Add(iTestFile);
+                }
+            }
+            foreach (listFile iDelFile in delFiles) {
+                this.Remove(iDelFile);
+            }
+           
+        }
+
+        internal void delete(List<string> pDelFileNames)
+        {
+            List<listFile> delFiles = new List<listFile>();
+            foreach (listFile iTestFile in this)
+                if (pDelFileNames.Contains(iTestFile.fileName))
+                    delFiles.Add(iTestFile);
+
+            foreach (listFile iDelFile in delFiles)
+                this.Remove(iDelFile);
         }
     }
 }

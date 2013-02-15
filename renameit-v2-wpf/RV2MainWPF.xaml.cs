@@ -6,6 +6,8 @@ using System.IO;
 using System;
 using System.Xml.Serialization;
 using System.Windows.Threading;
+using System.Collections.Generic;
+using System.Linq;
 namespace renameit_v2_wpf
 {
     /// <summary>
@@ -33,6 +35,8 @@ namespace renameit_v2_wpf
                 System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(ruleList));
                 System.IO.StreamReader file = new System.IO.StreamReader(pLoadFile);
                 ruleList newRules = (ruleList)reader.Deserialize(file);
+                file.Close();
+
                 foreach (baseRule iRule in newRules)
                 {
                     if (iRule.extraControl != null)
@@ -55,27 +59,27 @@ namespace renameit_v2_wpf
                 System.IO.StreamWriter fileWriter = null;
                 try
                 {
-                    dispatcherTimer.Stop(); 
+                    dispatcherTimer.Stop();
                     writeStream = new FileStream(pWriteFile, FileMode.Create, FileAccess.Write, FileShare.None);
                     System.Xml.Serialization.XmlSerializer writer =
                     new System.Xml.Serialization.XmlSerializer(typeof(ruleList));
-                    
+
                     fileWriter = new System.IO.StreamWriter(writeStream);
                     writer.Serialize(fileWriter, currentRules);
                     sbiLoadSave.Content = "Saved " + DateTime.Now.ToString();
-                    
+
                 }
                 catch (Exception exc)
                 {
                     sbiLoadSave.Content = "Save Error " + exc.Message;
-                    lblError.Content = exc.ToString();
+
                 }
                 finally
                 {
                     //if (writeStream != null) writeStream.Close();
                     if (fileWriter != null) fileWriter.Close();
                 }
-                
+
 
             }
         }
@@ -114,13 +118,14 @@ namespace renameit_v2_wpf
                     fList.Add(new listFile { fileName = iFilename });
                     added++;
                 }
-                else {
+                else
+                {
                     ignored++;
                 }
 
-            
+
             lastOpenDir = System.IO.Path.GetDirectoryName(pAddFiles[pAddFiles.Length - 1]);
-            sbiAddedMsg.Content = string.Format("{0} files added - {1} files ignored",added,ignored);
+            sbiAddedMsg.Content = string.Format("{0} files added - {1} files ignored", added, ignored);
             updateFileList();
         }
 
@@ -165,7 +170,7 @@ namespace renameit_v2_wpf
 
         private void but_addRule_Click(object sender, RoutedEventArgs e)
         {
-            currentRules.Add(new ReplaceRule(this) { fromStr = "jpg", toStr = "gif" });
+            currentRules.Add(new ReplaceRule(this) { fromStr = "", toStr = "" });
             updateFileList();
         }
 
@@ -183,15 +188,14 @@ namespace renameit_v2_wpf
 
         private void but_addRegExRule_Click(object sender, RoutedEventArgs e)
         {
-            currentRules.Add(new RegExRule(this) { fromStr = "jpg", toStr = "gif", caseSensitive = true });
-
+            currentRules.Add(new RegExRule(this) { fromStr = "", toStr = "", caseSensitive = true });
         }
 
 
 
         private void lbRules_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (lbRules.SelectedItem!=null && ((baseRule)lbRules.SelectedItem).extraControl != null)
+            if (lbRules.SelectedItem != null && ((baseRule)lbRules.SelectedItem).extraControl != null)
             {
                 gridExtraControl.Children.Clear();
                 gridExtraControl.Children.Add(((baseRule)lbRules.SelectedItem).extraControl);
@@ -217,10 +221,79 @@ namespace renameit_v2_wpf
 
         private void but_delRule_Click(object sender, RoutedEventArgs e)
         {
-            if (lbRules.SelectedItem != null) {
+            if (lbRules.SelectedItem != null)
+            {
                 currentRules.RemoveAt(lbRules.SelectedIndex);
                 updateFileList();
             }
+        }
+
+        private void but_removeFile_Click(object sender, RoutedEventArgs e)
+        {
+            var d = Dispatcher.DisableProcessing();
+            List<string> delFileNames = new List<string>();
+            if (lvFiles.SelectedItems.Count > 0)
+            {
+                                    
+                foreach (listFile delFile in lvFiles.SelectedItems)
+                    delFileNames.Add(delFile.fileName);
+
+                fList.delete(delFileNames);
+            }
+            d.Dispose();
+            sbiAddedMsg.Content = string.Format("{0} Files Removed", delFileNames.Count());
+
+        }
+
+        private void but_clear_Files_Click(object sender, RoutedEventArgs e)
+        {
+            var d = Dispatcher.DisableProcessing();
+            int delCount = fList.Count();
+            fList.Clear();
+            d.Dispose();
+            updateFileList();
+            sbiAddedMsg.Content = string.Format("{0} Files Removed", delCount);
+        }
+
+        private void but_rule_up_Click(object sender, RoutedEventArgs e)
+        {
+            if (lbRules.SelectedItem != null)
+            {
+                baseRule movingRule = (baseRule)lbRules.SelectedItem;
+                currentRules.MoveUp(movingRule);
+                lbRules.SelectedItem = movingRule;
+            }
+        }
+
+        private void but_rule_down_Click(object sender, RoutedEventArgs e)
+        {
+            if (lbRules.SelectedItem != null)
+            {
+                baseRule movingRule = (baseRule)lbRules.SelectedItem;
+                currentRules.MoveDown(movingRule);
+                lbRules.SelectedItem = movingRule;
+            }
+
+        }
+
+        private void but_renameFiles_Click(object sender, RoutedEventArgs e)
+        {
+            int renamed = 0, failed = 0;
+            foreach (listFile renameFile in fList)
+            {
+                if (renameFile.doRename() == String.Empty)
+                {
+                    renamed++;
+                }
+                else
+                {
+                    failed++;
+                };
+
+            };
+            fList.Clear();
+            sbiAddedMsg.Content = string.Format("{0} Files renamed, {1} Files failed", renamed, failed);
+
         }
     }
 }

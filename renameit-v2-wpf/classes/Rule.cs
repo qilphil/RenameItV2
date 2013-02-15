@@ -49,6 +49,7 @@ namespace renameit_v2_wpf.rules
                 if (this.fromStrValue != value)
                 {
                     this.fromStrValue = value;
+                    hasError = (value == String.Empty);
                     NotifyPropertyChanged();
                 }
             }

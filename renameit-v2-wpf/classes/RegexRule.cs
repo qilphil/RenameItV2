@@ -53,6 +53,8 @@ namespace renameit_v2_wpf.rules
                     mkRegEx();
                     NotifyPropertyChanged();
                 }
+                if (value == String.Empty)
+                    hasError = true;
             }
         }
         private bool? caseSensitiveValue;
