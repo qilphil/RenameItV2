@@ -3,18 +3,18 @@ using System.Xml.Serialization;
 namespace renameit_v2_wpf.rules
 {
     [Serializable]
-    [XmlInclude(typeof(baseRule))]
-    public class ReplaceRule : baseRule
+    [XmlInclude(typeof(BaseRule))]
+    public class ReplaceRule : BaseRule
     {
 
-        public override string apply(string filename)
+        public override string Apply(string filename)
         {
             if (fromStr != String.Empty)
                 return filename.Replace(fromStr, toStr);
             else
                 return fromStr;
         }
-        public override baseRule clone()
+        public override BaseRule clone()
         {
             return this.DeepClone();
         }

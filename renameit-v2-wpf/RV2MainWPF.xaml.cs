@@ -1,13 +1,13 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using renameit_v2_wpf.rules;
-using System.IO;
+﻿using renameit_v2_wpf.rules;
 using System;
-using System.Xml.Serialization;
-using System.Windows.Threading;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Threading;
+using System.Xml.Serialization;
+
 namespace renameit_v2_wpf
 {
     /// <summary>
@@ -15,36 +15,37 @@ namespace renameit_v2_wpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        public fileList fList { get; set; }
-        public ruleList currentRules { get; set; }
-        private string lastOpenDir { get; set; }
+        public FileList fList { get; set; }
+        public RuleList CurrentRules { get; set; }
+        private string LastOpenDir { get; set; }
         private string defFileName = "default.xml";
         private string defFilePath;
-        DispatcherTimer dispatcherTimer;
+        readonly DispatcherTimer dispatcherTimer;
 
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             FileWrite(defFilePath);
         }
+
         private void FileLoad(string pLoadFile)
         {
             isLoading = true;
             if (File.Exists(pLoadFile))
             {
-                System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(ruleList));
-                System.IO.StreamReader file = new System.IO.StreamReader(pLoadFile);
-                ruleList newRules = (ruleList)reader.Deserialize(file);
+                var reader = new XmlSerializer(typeof(RuleList));
+                var file = new StreamReader(pLoadFile);
+                var newRules = (RuleList)reader.Deserialize(file);
                 file.Close();
 
-                foreach (baseRule iRule in newRules)
+                foreach (BaseRule iRule in newRules)
                 {
                     if (iRule.extraControl != null)
                     {
                         iRule.extraControl.myWindow = this;
                     }
                 };
-                currentRules = newRules;
+                CurrentRules = newRules;
 
             }
             isLoading = false;
@@ -55,17 +56,14 @@ namespace renameit_v2_wpf
         {
             if (!isLoading && Directory.Exists(Path.GetDirectoryName(pWriteFile)))
             {
-                FileStream writeStream = null;
-                System.IO.StreamWriter fileWriter = null;
+                StreamWriter fileWriter = null;
                 try
                 {
                     dispatcherTimer.Stop();
-                    writeStream = new FileStream(pWriteFile, FileMode.Create, FileAccess.Write, FileShare.None);
-                    System.Xml.Serialization.XmlSerializer writer =
-                    new System.Xml.Serialization.XmlSerializer(typeof(ruleList));
-
-                    fileWriter = new System.IO.StreamWriter(writeStream);
-                    writer.Serialize(fileWriter, currentRules);
+                    FileStream writeStream = new FileStream(pWriteFile, FileMode.Create, FileAccess.Write, FileShare.None);
+                    fileWriter = new StreamWriter(writeStream);
+                    var writer = new XmlSerializer(typeof(RuleList));
+                    writer.Serialize(fileWriter, CurrentRules);
                     sbiLoadSave.Content = "Saved " + DateTime.Now.ToString();
 
                 }
@@ -77,7 +75,7 @@ namespace renameit_v2_wpf
                 finally
                 {
                     //if (writeStream != null) writeStream.Close();
-                    if (fileWriter != null) fileWriter.Close();
+                    fileWriter?.Close();
                 }
 
 
@@ -92,30 +90,30 @@ namespace renameit_v2_wpf
             {
                 Directory.CreateDirectory(UserPath);
             }
-            defFilePath = System.IO.Path.Combine(UserPath, defFileName);
+            defFilePath = Path.Combine(UserPath, defFileName);
             dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Tick += dispatcherTimer_Tick;
             dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
             dispatcherTimer.Stop();
-            currentRules = new ruleList();
+            CurrentRules = new RuleList();
             FileLoad(defFilePath);
 
-            fList = new fileList();
+            fList = new FileList();
 
-            lastOpenDir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
-            lbRules.ItemsSource = currentRules;
+            LastOpenDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            lbRules.ItemsSource = CurrentRules;
             lvFiles.ItemsSource = fList;
-            gridRules.DataContext = currentRules;
+            gridRules.DataContext = CurrentRules;
         }
 
-        private void addFileList(string[] pAddFiles)
+        private void AddFileList(string[] pAddFiles)
         {
             int total = pAddFiles.Length;
             int added = 0, ignored = 0;
             foreach (string iFilename in pAddFiles)
                 if (!fList.ContainsFileName(iFilename))
                 {
-                    fList.Add(new listFile { fileName = iFilename });
+                    fList.Add(new ListFile { FileName = iFilename });
                     added++;
                 }
                 else
@@ -124,8 +122,8 @@ namespace renameit_v2_wpf
                 }
 
 
-            lastOpenDir = System.IO.Path.GetDirectoryName(pAddFiles[pAddFiles.Length - 1]);
-            sbiAddedMsg.Content = string.Format("{0} files added - {1} files ignored", added, ignored);
+            LastOpenDir = Path.GetDirectoryName(pAddFiles[pAddFiles.Length - 1]);
+            sbiAddedMsg.Content = $"{added} files added - {ignored} files ignored";
             updateFileList();
         }
 
@@ -138,8 +136,7 @@ namespace renameit_v2_wpf
                 overflowGrid.Visibility = Visibility.Collapsed;
             }
 
-            var mainPanelBorder = toolBar.Template.FindName("MainPanelBorder", toolBar) as FrameworkElement;
-            if (mainPanelBorder != null)
+            if (toolBar.Template.FindName("MainPanelBorder", toolBar) is FrameworkElement mainPanelBorder)
             {
                 mainPanelBorder.Margin = new Thickness(0);
             }
@@ -149,7 +146,7 @@ namespace renameit_v2_wpf
         {
             var d = Dispatcher.DisableProcessing();
 
-            fList.apply(currentRules);
+            fList.apply(CurrentRules);
 
             d.Dispose();
             lvFiles.Items.Refresh();
@@ -163,21 +160,21 @@ namespace renameit_v2_wpf
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                string[] addedFileList = (string[])e.Data.GetData(DataFormats.FileDrop);
-                addFileList(addedFileList);
+                var addedFileList = e.Data.GetData(DataFormats.FileDrop) as string[];
+                AddFileList(addedFileList);
             }
         }
 
         private void but_addRule_Click(object sender, RoutedEventArgs e)
         {
-            currentRules.Add(new ReplaceRule(this) { fromStr = "", toStr = "" });
+            CurrentRules.Add(new ReplaceRule(this) { fromStr = "", toStr = "" });
             updateFileList();
         }
 
 
         private void but_clear_Click(object sender, RoutedEventArgs e)
         {
-            currentRules.Clear();
+            CurrentRules.Clear();
             updateFileList();
         }
 
@@ -188,24 +185,21 @@ namespace renameit_v2_wpf
 
         private void but_addRegExRule_Click(object sender, RoutedEventArgs e)
         {
-            currentRules.Add(new RegExRule(this) { fromStr = "", toStr = "", caseSensitive = true });
+            CurrentRules.Add(new RegExRule(this) { fromStr = "", toStr = "", CaseSensitive = true });
         }
 
 
 
         private void lbRules_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (lbRules.SelectedItem != null && ((baseRule)lbRules.SelectedItem).extraControl != null)
+            if (lbRules.SelectedItem != null && (lbRules.SelectedItem as BaseRule).extraControl != null)
             {
                 gridExtraControl.Children.Clear();
-                gridExtraControl.Children.Add(((baseRule)lbRules.SelectedItem).extraControl);
+                gridExtraControl.Children.Add(((BaseRule)lbRules.SelectedItem).extraControl);
             }
-            else
+            else if (gridExtraControl.Children.Count > 0)
             {
-                if (gridExtraControl.Children.Count > 0)
-                {
-                    gridExtraControl.Children.Clear();
-                }
+                gridExtraControl.Children.Clear();
             }
         }
 
@@ -223,7 +217,7 @@ namespace renameit_v2_wpf
         {
             if (lbRules.SelectedItem != null)
             {
-                currentRules.RemoveAt(lbRules.SelectedIndex);
+                CurrentRules.RemoveAt(lbRules.SelectedIndex);
                 updateFileList();
             }
         }
@@ -231,13 +225,10 @@ namespace renameit_v2_wpf
         private void but_removeFile_Click(object sender, RoutedEventArgs e)
         {
             var d = Dispatcher.DisableProcessing();
-            List<string> delFileNames = new List<string>();
+            var delFileNames = new List<string>();
             if (lvFiles.SelectedItems.Count > 0)
             {
-                                    
-                foreach (listFile delFile in lvFiles.SelectedItems)
-                    delFileNames.Add(delFile.fileName);
-
+                delFileNames.AddRange(((IList<ListFile>)lvFiles.SelectedItems).Select(delFile => delFile.FileName));
                 fList.delete(delFileNames);
             }
             d.Dispose();
@@ -259,8 +250,8 @@ namespace renameit_v2_wpf
         {
             if (lbRules.SelectedItem != null)
             {
-                baseRule movingRule = (baseRule)lbRules.SelectedItem;
-                currentRules.MoveUp(movingRule);
+                var movingRule = (BaseRule)lbRules.SelectedItem;
+                CurrentRules.MoveUp(movingRule);
                 lbRules.SelectedItem = movingRule;
             }
         }
@@ -269,8 +260,8 @@ namespace renameit_v2_wpf
         {
             if (lbRules.SelectedItem != null)
             {
-                baseRule movingRule = (baseRule)lbRules.SelectedItem;
-                currentRules.MoveDown(movingRule);
+                var movingRule = (BaseRule)lbRules.SelectedItem;
+                CurrentRules.MoveDown(movingRule);
                 lbRules.SelectedItem = movingRule;
             }
 
@@ -279,9 +270,9 @@ namespace renameit_v2_wpf
         private void but_renameFiles_Click(object sender, RoutedEventArgs e)
         {
             int renamed = 0, failed = 0;
-            foreach (listFile renameFile in fList)
+            foreach (ListFile renameFile in fList)
             {
-                if (renameFile.doRename() == String.Empty)
+                if (renameFile.DoRename?.Length == 0)
                 {
                     renamed++;
                 }
@@ -292,8 +283,7 @@ namespace renameit_v2_wpf
 
             };
             fList.Clear();
-            sbiAddedMsg.Content = string.Format("{0} Files renamed, {1} Files failed", renamed, failed);
-
+            sbiAddedMsg.Content = $"{renamed} Files renamed, {failed} Files failed";
         }
     }
 }

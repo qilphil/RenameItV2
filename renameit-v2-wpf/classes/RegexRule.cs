@@ -1,86 +1,80 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
-
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
+
 namespace renameit_v2_wpf.rules
 {
     [Serializable]
-    [XmlInclude(typeof(baseRule))]
-   public class RegExRule : baseRule
+    [XmlInclude(type: typeof(BaseRule))]
+   public class RegExRule : BaseRule
     {
         private Regex fromRegEx;
 
-        public override baseRule clone()
-        {
-            return this.DeepClone();
-        }
+        public override BaseRule clone() => this.DeepClone();
+
         public RegExRule(RegExRule pRegexRule)
             : base(pRegexRule)
         {
 
 
         }
+
         public RegExRule(MainWindow pMainWindow)
-            : base()
         {
-            extraControl = new renameit_v2_wpf.RuleFormRegEx() { myWindow = pMainWindow };
+            extraControl = new RuleFormRegEx() { myWindow = pMainWindow };
         }
+
         public RegExRule()
-            : base()
         {
-            extraControl = new renameit_v2_wpf.RuleFormRegEx();
+            extraControl = new RuleFormRegEx();
         }
+
         public override string fromStr
         {
             get
             {
-                return this.fromStrValue;
+                return fromStrValue;
             }
             set
             {
-                if (this.fromStrValue != value)
+                if (fromStrValue != value)
                 {
-                    this.fromStrValue = value;
-                    mkRegEx();
+                    fromStrValue = value;
+                    MkRegEx();
                     NotifyPropertyChanged();
                 }
-                if (value == String.Empty)
+                if (value?.Length == 0)
                     hasError = true;
             }
         }
         private bool? caseSensitiveValue;
-        public bool? caseSensitive
+
+        public bool? CaseSensitive
         {
             get
             {
-                return this.caseSensitiveValue;
+                return caseSensitiveValue;
             }
             set
             {
-                if (this.caseSensitiveValue != value)
+                if (caseSensitiveValue != value)
                 {
-                    this.caseSensitiveValue = value;
-                    mkRegEx();
+                    caseSensitiveValue = value;
+                    MkRegEx();
                     NotifyPropertyChanged();
                 }
             }
         }
 
 
-        private void mkRegEx()
+        private void MkRegEx()
         {
-            Label rexError = ((renameit_v2_wpf.RuleFormRegEx)extraControl).lblRegExError;
-            bool regExHasError = false;  
+            Label rexError = ((RuleFormRegEx)extraControl).lblRegExError;
+            bool regExHasError = false;
             try
             {
-                fromRegEx = new Regex(fromStrValue, RegexOptions.Compiled | ((bool)caseSensitive ? 0 : RegexOptions.IgnoreCase));
+                fromRegEx = new Regex(fromStrValue, RegexOptions.Compiled | ((bool)CaseSensitive ? 0 : RegexOptions.IgnoreCase));
                 rexError.Content = string.Empty;
             }
             catch (Exception e)
@@ -91,23 +85,22 @@ namespace renameit_v2_wpf.rules
             }
             hasError = regExHasError;
         }
-   
-        public override bool isValid()
-        {
-            return !(fromRegEx == null);
-        }
-        public override string apply(string filename)
+
+        public override bool isValid() => fromRegEx != null;
+        public override string Apply(string filename)
         {
 
             return (fromRegEx == null) ? filename : fromRegEx.Replace(filename, toStr);
         }
-        public override void saveData(/*ruleForm ruleForm*/)
+
+        public override void SaveData(/*ruleForm ruleForm*/)
         {
         }
+
         public override string ToString()
         {
-            string caseStateStr = (bool)caseSensitive ? "On" : "Off";
-            return string.Format("Regular Expression - From: {0} To: {1} Case: {2}", fromStr, toStr, caseStateStr);
+            string caseStateStr = (bool)CaseSensitive ? "On" : "Off";
+            return $"Regular Expression - From: {fromStr} To: {toStr} Case: {caseStateStr}";
         }
     }
 }

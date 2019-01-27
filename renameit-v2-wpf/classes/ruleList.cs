@@ -7,25 +7,25 @@ using System.Xml.Serialization;
 namespace renameit_v2_wpf.rules
 {
     [Serializable]
-    [XmlInclude(typeof(baseRule))]
+    [XmlInclude(typeof(BaseRule))]
     [XmlInclude(typeof(ReplaceRule))]
     [XmlInclude(typeof(RegExRule))]
-    public class ruleList : ObservableCollection<baseRule>
+    public class RuleList : ObservableCollection<BaseRule>
     {
-        public string apply(listFile pFile)
+        public string apply(ListFile pFile)
         {
-            string rReplacedName = pFile.fileName;
-            foreach (baseRule iRule in this)
+            string rReplacedName = pFile.FileName;
+            foreach (BaseRule iRule in this)
             {
-                rReplacedName = iRule.apply(System.IO.Path.GetFileName(rReplacedName));
+                rReplacedName = iRule.Apply(System.IO.Path.GetFileName(rReplacedName));
             }
                        
-            pFile.convertedFileName = rReplacedName;
-            pFile.testDuplicate();
+            pFile.ConvertedFileName = rReplacedName;
+            pFile.TestDuplicate();
             return rReplacedName;
         }
 
-        internal void MoveUp(baseRule pMoveUpRule)
+        internal void MoveUp(BaseRule pMoveUpRule)
         {
             int indexpos = IndexOf(pMoveUpRule);
             if (indexpos > 0)
@@ -35,7 +35,7 @@ namespace renameit_v2_wpf.rules
             }
         }
 
-        internal void MoveDown(baseRule pMoveDownRule)
+        internal void MoveDown(BaseRule pMoveDownRule)
         {
             int indexpos = IndexOf(pMoveDownRule);
             if (indexpos < Count-1)

@@ -8,7 +8,7 @@ namespace renameit_v2_wpf.rules
 {
 
     [Serializable]
-    public class baseRule : INotifyPropertyChanged
+    public class BaseRule : INotifyPropertyChanged
     {
         protected string fromStrValue;
         protected string toStrValue;
@@ -25,13 +25,13 @@ namespace renameit_v2_wpf.rules
         {
             get
             {
-                return this.hasErrorValue;
+                return hasErrorValue;
             }
             set
             {
-                if (this.hasErrorValue != value)
+                if (hasErrorValue != value)
                 {
-                    this.hasErrorValue = value;
+                    hasErrorValue = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -42,14 +42,14 @@ namespace renameit_v2_wpf.rules
         {
             get
             {
-                return this.fromStrValue;
+                return fromStrValue;
             }
             set
             {
-                if (this.fromStrValue != value)
+                if (fromStrValue != value)
                 {
-                    this.fromStrValue = value;
-                    hasError = (value == String.Empty);
+                    fromStrValue = value;
+                    hasError = (value?.Length == 0);
                     NotifyPropertyChanged();
                 }
             }
@@ -59,11 +59,11 @@ namespace renameit_v2_wpf.rules
         {
             get
             {
-                return this.toStrValue;
+                return toStrValue;
             }
             set
             {
-                if (this.toStrValue != value)
+                if (toStrValue != value)
                 {
                     this.toStrValue = value;
                     this.NotifyPropertyChanged();
@@ -72,36 +72,36 @@ namespace renameit_v2_wpf.rules
         }
 
 
-        public virtual string apply(string filename) { return filename; }
+        public virtual string Apply(string filename) { return filename; }
         public override string ToString() { return "Virtual Rule"; }
 
-        public virtual baseRule clone()
+        public virtual BaseRule clone()
         {
             return this.DeepClone();
         }
 
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            if (PropertyChanged != null)
-            {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public baseRule(baseRule pBaseRule)
-            : base()
+        /// <summary>
+        ///         Initialisiert eine neue Instanz der <see cref="object" />-Klasse.
+        ///       </summary>
+        /// <param name="pBaseRule"></param>
+        public BaseRule(BaseRule pBaseRule)
         {
 
         }
 
-        public baseRule()
+        public BaseRule()
         {
 
         }
 
 
 
-        protected void addControl(Control pNewControl, string pControlName)
+        protected void AddControl(Control pNewControl, string pControlName)
         {
             /*   if (!pRuleForm.ruleControls.ContainsKey(pControlName))
                {
@@ -114,17 +114,18 @@ namespace renameit_v2_wpf.rules
                    existingControl.Show();
                }*/
         }
-        public static Dictionary<System.Type, string> nameList = new Dictionary<System.Type, string>() {
+        public static Dictionary<Type, string> nameList = new Dictionary<Type, string>() {
             { typeof(ReplaceRule), "Einfaches Ersetzen" },
             { typeof(RegExRule), "Regular Expression" },
         };
+
         public virtual bool isValid()
         {
             return true;
         }
 
 
-        public virtual void saveData(/*ruleForm ruleForm*/)
+        public virtual void SaveData(/*ruleForm ruleForm*/)
         {
 
         }
