@@ -8,23 +8,24 @@ namespace renameit_v2_wpf.rules
         public bool ContainsFileName(string pfileName)
         {
             foreach (ListFile testFile in this)
+            {
                 if (testFile.FileName == pfileName)
                 {
                     return true;
                 }
+            }
 
             return false;
         }
 
-        internal void apply(RuleList pCurrentRules)
+        internal void Apply(RuleList pCurrentRules)
         {
-
             foreach (ListFile iFile in this)
             {
                 pCurrentRules.apply(iFile);
             }
-            
-            Dictionary<string,int> nameCounts = new Dictionary<string,int>();
+
+            var nameCounts = new Dictionary<string, int>();
             foreach (ListFile iFile in this) {
                 string fName = iFile.ConvertedFileName;
                 if (nameCounts.ContainsKey(fName))
@@ -36,7 +37,7 @@ namespace renameit_v2_wpf.rules
                     nameCounts[fName] = 1;
                 }
             }
-            List<string> alltargetNames = nameCounts.Keys.ToList<string>();
+            var alltargetNames = nameCounts.Keys.ToList();
             foreach (ListFile iFile in this)
             {
                 if (alltargetNames.Contains(iFile.ConvertedFileName) && nameCounts[iFile.ConvertedFileName] > 1)
@@ -45,33 +46,18 @@ namespace renameit_v2_wpf.rules
                     iFile.ErrorMessage = string.Format("Duplicate Filename {0} created.", iFile.ConvertedFileName);
                 }
             }
-            
-
         }
 
-        internal void delete(string pDelFileName)
+        internal void Delete(string pDelFileName)
         {
-            List<ListFile> delFiles =new List<ListFile>();
-            foreach(ListFile iTestFile in this) 
-            {
-                if (iTestFile.FileName == pDelFileName) {
-                    delFiles.Add(iTestFile);
-                }
-            }
-            foreach (ListFile iDelFile in delFiles) {
+            foreach (ListFile iDelFile in this.Where(x => x.FileName == pDelFileName)) {
                 Remove(iDelFile);
             }
-           
         }
 
-        internal void delete(List<string> pDelFileNames)
+        internal void Delete(List<string> pDelFileNames)
         {
-            List<ListFile> delFiles = new List<ListFile>();
-            foreach (ListFile iTestFile in this)
-                if (pDelFileNames.Contains(iTestFile.FileName))
-                    delFiles.Add(iTestFile);
-
-            foreach (ListFile iDelFile in delFiles)
+            foreach (ListFile iDelFile in this.Where(x => pDelFileNames.Contains(x.FileName)))
                 Remove(iDelFile);
         }
     }

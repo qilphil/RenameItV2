@@ -12,8 +12,8 @@ namespace renameit_v2
     public partial class ruleForm : Form
     {
         public Dictionary<string, Control> ruleControls = new Dictionary<string, Control>();
-        private baseRule mEditRule;
-        public baseRule editRule { get; set; }
+        private BaseRule mEditRule;
+        public BaseRule editRule { get; set; }
 
         public void addNamedControl(string pControlName, Control pControl)
         {
@@ -36,7 +36,7 @@ namespace renameit_v2
             InitializeComponent();
         }
 
-        public void setRule(baseRule pRule)
+        public void setRule(BaseRule pRule)
         {
             editRule = pRule.clone();
             pRule.setupForm(this);

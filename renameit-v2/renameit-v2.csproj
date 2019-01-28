@@ -49,18 +49,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="classes\deepClone.cs" />
-    <Compile Include="classes\listfile.cs" />
     <Compile Include="classes\RegexRule.cs" />
     <Compile Include="classes\ReplaceRule.cs" />
     <Compile Include="classes\Rule.cs" />
-    <Compile Include="classes\ruleList.cs" />
+    <Compile Include="classes\FileList.cs" />
+    <Compile Include="classes\ExtensionMethods.cs" />
+    <Compile Include="classes\ListFile.cs" />
     <Compile Include="ruleForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ruleForm.Designer.cs">
       <DependentUpon>ruleForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="classes\RuleList.cs" />
     <Compile Include="RV2Main.cs">
       <SubType>Form</SubType>
     </Compile>

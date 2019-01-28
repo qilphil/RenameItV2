@@ -5,12 +5,12 @@ using System.Text;
 
 namespace renameit_v2.classes
 {
-    public class ruleList : List<baseRule>
+    public class RuleList : List<BaseRule>
     {
-        public String apply(listFile pFile)
+        public String apply(ListFile pFile)
         {
-            String rReplacedName = pFile.fileName;
-            foreach (baseRule iRule in this)
+            String rReplacedName = pFile.FileName;
+            foreach (BaseRule iRule in this)
             {
                 rReplacedName = iRule.apply(rReplacedName);
             }

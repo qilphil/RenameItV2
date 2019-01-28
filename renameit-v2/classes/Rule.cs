@@ -9,26 +9,27 @@ namespace renameit_v2.classes
 {
 
     [Serializable]
-    public class baseRule
+    public class BaseRule
     {
-        public virtual String fromStr { get; set; }
-        public virtual String toStr { get; set; }
+        public virtual string fromStr { get; set; }
+        public virtual string toStr { get; set; }
 
         public virtual string apply(string filename) { return filename; }
         public override string ToString() { return "Virtual Rule"; }
 
         public Dictionary<string, string> ruleProps;
-        public virtual baseRule clone()
+        public virtual BaseRule clone()
         {
             return this.DeepClone();
         }
 
-        public baseRule(baseRule pBaseRule)
+        /// <summary>Initializes a new instance of the <see cref="object" /> class.</summary>
+        public BaseRule(BaseRule pBaseRule)
             : base()
         {
 
         }
-        public baseRule()
+        public BaseRule()
         {
             this.ruleProps = new Dictionary<string, string>();
         }
@@ -56,12 +57,12 @@ namespace renameit_v2.classes
                 existingControl.Show();
             }
         }
-        public static Dictionary<System.Type, string> nameList = new Dictionary<System.Type, string>() {
+        public static Dictionary<Type, string> nameList = new Dictionary<Type, string>() {
             {typeof(ReplaceRule), "Einfaches Ersetzen" },
             {typeof(RegExRule), "Regular Expression" },
             
         };
-        public virtual bool isValid()
+        public virtual bool IsValid()
         {
             return true;
         }

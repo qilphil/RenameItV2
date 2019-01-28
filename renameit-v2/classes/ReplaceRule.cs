@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 namespace renameit_v2.classes
 {
     [Serializable]
-    class ReplaceRule : baseRule
+    class ReplaceRule : BaseRule
     {
 
         public override string apply(string filename)
         {
             return filename.Replace(fromStr, toStr);
         }
-        public override baseRule clone()
+        public override BaseRule clone()
         {
             return this.DeepClone();
         }

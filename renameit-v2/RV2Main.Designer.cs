@@ -281,6 +281,7 @@
             this.lvRules.TabIndex = 9;
             this.lvRules.UseCompatibleStateImageBehavior = false;
             this.lvRules.View = System.Windows.Forms.View.List;
+            this.lvRules.SelectedIndexChanged += new System.EventHandler(this.LvRules_SelectedIndexChanged);
             this.lvRules.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lvRules_MouseDoubleClick);
             // 
             // RV2Main

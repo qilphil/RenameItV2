@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace renameit_v2.classes
+﻿namespace renameit_v2.classes
 {
-    public class listFile
+    public class ListFile
     {
-        public string fileName { get; set; }
+        public string FileName { get; set; }
 
-    }
-    public class fileList : List<listFile> { 
     }
 }

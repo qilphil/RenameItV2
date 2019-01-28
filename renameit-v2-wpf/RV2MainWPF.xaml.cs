@@ -108,7 +108,7 @@ namespace renameit_v2_wpf
 
         private void AddFileList(string[] pAddFiles)
         {
-            int total = pAddFiles.Length;
+            _ = pAddFiles.Length;
             int added = 0, ignored = 0;
             foreach (string iFilename in pAddFiles)
                 if (!fList.ContainsFileName(iFilename))
@@ -130,8 +130,7 @@ namespace renameit_v2_wpf
         private void ToolBar_Loaded(object sender, RoutedEventArgs e)
         {
             ToolBar toolBar = sender as ToolBar;
-            var overflowGrid = toolBar.Template.FindName("OverflowGrid", toolBar) as FrameworkElement;
-            if (overflowGrid != null)
+            if (toolBar.Template.FindName("OverflowGrid", toolBar) is FrameworkElement overflowGrid)
             {
                 overflowGrid.Visibility = Visibility.Collapsed;
             }
@@ -146,7 +145,7 @@ namespace renameit_v2_wpf
         {
             var d = Dispatcher.DisableProcessing();
 
-            fList.apply(CurrentRules);
+            fList.Apply(CurrentRules);
 
             d.Dispose();
             lvFiles.Items.Refresh();
@@ -229,7 +228,7 @@ namespace renameit_v2_wpf
             if (lvFiles.SelectedItems.Count > 0)
             {
                 delFileNames.AddRange(((IList<ListFile>)lvFiles.SelectedItems).Select(delFile => delFile.FileName));
-                fList.delete(delFileNames);
+                fList.Delete(delFileNames);
             }
             d.Dispose();
             sbiAddedMsg.Content = string.Format("{0} Files Removed", delFileNames.Count());

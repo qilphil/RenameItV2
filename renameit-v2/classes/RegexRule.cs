@@ -9,14 +9,14 @@ using System.Windows.Forms;
 namespace renameit_v2.classes
 {
     [Serializable]
-    class RegExRule : baseRule
+    class RegExRule : BaseRule
     {
         private String mFromStr;
         private Regex fromRegEx;
 
         private string regexError;
 
-        public override baseRule clone()
+        public override BaseRule clone()
         {
             return this.DeepClone();
         }
@@ -99,7 +99,7 @@ namespace renameit_v2.classes
             mkRegEx();
             ((Label)pRuleForm.ruleControls["lbRegexError"]).Text = regexError;
         }
-        public override bool isValid() {
+        public override bool IsValid() {
             return !(fromRegEx == null);
         }
         public override string apply(string filename)

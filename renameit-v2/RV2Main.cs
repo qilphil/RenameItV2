@@ -8,14 +8,14 @@ namespace renameit_v2
 {
     public partial class RV2Main : Form
     {
-        public fileList fList { get; set; }
-        public ruleList currentRules { get; set; }
+        public FileList fList { get; set; }
+        public RuleList currentRules { get; set; }
         private string lastOpenDir { get; set; }
         public RV2Main()
         {
             InitializeComponent();
-            currentRules = new ruleList();
-            fList = new fileList();
+            currentRules = new RuleList();
+            fList = new FileList();
             lastOpenDir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
             updateRuleList();
         }
@@ -32,10 +32,10 @@ namespace renameit_v2
         private void updateRuleList()
         {
             lvRules.Items.Clear();
-            foreach (baseRule iRule in currentRules)
+            foreach (BaseRule iRule in currentRules)
             {
                 lvRules.Items.Add(iRule.ToString());
-                if (!iRule.isValid())
+                if (!iRule.IsValid())
                 {
                     ListViewItem newRuleItem = lvRules.Items[lvRules.Items.Count - 1];
                     newRuleItem.ForeColor = Color.FromName("Red");
@@ -49,9 +49,9 @@ namespace renameit_v2
             lvFiles.Items.Clear();
             List<ListViewItem> renderList = new List<ListViewItem>();
 
-            foreach (listFile iFile in fList)
+            foreach (ListFile iFile in fList)
             {
-                string shortFilename = Path.GetFileName(iFile.fileName);
+                string shortFilename = Path.GetFileName(iFile.FileName);
                 string[] fileinit = { shortFilename, Path.GetFileName(currentRules.apply(iFile)) };
                 renderList.Add(new ListViewItem(fileinit));
             }
@@ -128,7 +128,7 @@ namespace renameit_v2
         private void addFileList(string[] pAddFiles)
         {
             foreach (string filename in pAddFiles)
-                fList.Add(new listFile { fileName = filename });
+                fList.Add(new ListFile { FileName = filename });
             lastOpenDir = Path.GetDirectoryName(pAddFiles[pAddFiles.Length - 1]);
             updateRuleList();
             updateFileList();
@@ -145,6 +145,9 @@ namespace renameit_v2
             }
         }
 
+        private void LvRules_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
 
+        }
     }
 }
